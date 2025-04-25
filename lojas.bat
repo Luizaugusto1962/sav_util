@@ -60,7 +60,7 @@ set /p "CHOICE=Digite a opcao: "
 
 if "%CHOICE%"=="1" goto STORE_MENU
 if "%CHOICE%"=="2" goto PANEL_MENU
-if "%CHOICE%"=="0" goto CLEANUP_EXIT
+if "%CHOICE%"=="0" goto limpar_sair
 
 echo Opcao invalida! Tente novamente.
 timeout /t 2 >nul
@@ -73,7 +73,7 @@ echo %TIME% %DATE%
 echo %LINE%
 echo ^|      SELECIONE A LOJA           ^|
 echo %LINE%
-call :PRINT_STORE_LIST
+call :LISTA_OPCAO
 set /p "STORE_ID=Digite o numero da loja: "
 
 if "%STORE_ID%"=="0" goto MAIN_MENU
@@ -93,7 +93,7 @@ echo %TIME% %DATE%
 echo %LINE%
 echo ^|      SELECIONE O PAINEL         ^|
 echo %LINE%
-call :PRINT_STORE_LIST
+call :LISTA_OPCAO
 set /p "PANEL_ID=Digite o numero do painel: "
 
 if "%PANEL_ID%"=="0" goto MAIN_MENU
@@ -107,7 +107,7 @@ if errorlevel 1 (
 goto RUN_PANEL
 
 :: Impressão da lista de lojas/painéis
-:PRINT_STORE_LIST
+:LISTA_OPCAO
 echo ^|   1) Gil                        ^|
 echo ^|   2) Casa Pronta                ^|
 echo ^|   3) Jisam                      ^|
@@ -162,7 +162,7 @@ exit /b 0
 :: Executar cliente isCOBOL
 :RUN_CLIENT
 call :SETUP_ENVIRONMENT
-if errorlevel 1 goto CLEANUP_EXIT
+if errorlevel 1 goto limpar_sair
 
 start "isCOBOL Client" "%ISCOBOL_PATH%\bin\isclient.exe" ^
 -J-Discobol.encoding=CP860 ^
@@ -171,12 +171,12 @@ start "isCOBOL Client" "%ISCOBOL_PATH%\bin\isclient.exe" ^
 -port %PORT% ^
 SPS800
 
-goto CLEANUP_EXIT
+goto limpar_sair
 
 :: Executar painel isCOBOL
 :RUN_PANEL
 call :SETUP_ENVIRONMENT
-if errorlevel 1 goto CLEANUP_EXIT
+if errorlevel 1 goto limpar_sair
 
 start "isCOBOL Panel" "%ISCOBOL_PATH%\bin\isclient.exe" ^
 -J-Discobol.encoding=CP860 ^
@@ -186,7 +186,7 @@ start "isCOBOL Panel" "%ISCOBOL_PATH%\bin\isclient.exe" ^
 -panel
 
 :: Finalização
-:CLEANUP_EXIT
+:limpar_sair
 set "HOST="
 set "PORT="
 set "VERSION="

@@ -51,11 +51,10 @@ goto menu_version
 set "ISCOBOL_JDK_ROOT=C:\Program Files\Java\jdk-21"
 set "ISCOBOL_JRE_ROOT=C:\Program Files\Java\jre1.8.0_451"
 set "EXE4J_JAVA_HOME=C:\iscobol\jre"
-goto menu_porta
+goto MENU_ISCOBOL
 
 :: Menu de seleção de porta
-:menu_porta
-cls
+:PRINT_STORE_LIST
 echo %time% %date%
 echo   %line2%
 echo  ^|  Selecione a Porta              ^|
@@ -78,18 +77,25 @@ echo  ^|  12) 41142 - Titan              ^|
 echo  ^|  13) 41143 - Patricia           ^|
 echo  ^|  14) 41144 - Velas              ^|
 echo  ^|  15) 41145 - Ideal/2Leoes       ^|
-echo  ^|  16) 41146 - Braizinho/Dep.Lima ^|
+echo  ^|  16) 41146 - Deposito Lima      ^|
 echo  ^|  17) 41147 - LA                 ^|
 echo  ^|  18) 41148 - Vilas Boas         ^|
 echo  ^|  19) 41149 - Real Pecas         ^|
 echo  ^|  99) Painel                     ^|
 echo  ^|   0) Voltar                     ^|
 echo   %line2%
-echo.
+exit /b
+
+:MENU_ISCOBOL
+:: Validação e configuração da porta
+cls
+echo %LINE%
+echo ^|      SELECIONE A LOJA           ^|
+echo %LINE%
+call :PRINT_STORE_LIST
 set /p "op_porta=Selecione o numero da porta para o sistema ou Painel: "
 echo.
 
-:: Validação e configuração da porta
 if "!op_porta!"=="0" goto menu_version
 if "!op_porta!"=="99" goto menu_panel
 if "!op_porta!"=="35" set "PORT=10999"& set "HOSTNAME=169.169.69.69"& goto run_client
@@ -115,31 +121,7 @@ echo %time% %date%
 echo   %line2%
 echo  ^|  Selecione o Painel             ^|
 echo   %line2%
-echo  ^|  35) Serv.Maq.Virtual           ^|
-echo  ^|  33) Servidor Luiz              ^|
-echo  ^|  30) 41130 - Lojao              ^|
-echo  ^|   1) 41131 - Vip/Gil            ^|
-echo  ^|   2) 41132 - C.Pronta           ^|
-echo  ^|   3) 41133 - Jisam              ^|
-echo  ^|   4) 41134 - Dmaker             ^|
-echo  ^|   5) 41135 - Diten              ^|
-echo  ^|   6) 41136 - Fat                ^|
-echo  ^|   7) 41137 - Kalebre            ^|
-echo  ^|   8) 41138 - Atual              ^|
-echo  ^|   9) 41139 - Dishelp            ^|
-echo  ^|  10) 41140 - Jtelecom           ^|
-echo  ^|  11) 41141 - Cheddar            ^|
-echo  ^|  12) 41142 - Titan              ^|
-echo  ^|  13) 41143 - Patricia           ^|
-echo  ^|  14) 41144 - Velas              ^|
-echo  ^|  15) 41145 - Ideal              ^|
-echo  ^|  16) 41146 - Braizinho          ^|
-echo  ^|  17) 41147 - LA                 ^|
-echo  ^|  18) 41148 - Vilas Boas         ^|
-echo  ^|  19) 41149 - Real Pecas         ^|
-echo  ^|   0) Voltar                     ^|
-echo   %line2%
-echo.
+call :PRINT_STORE_LIST
 set /p "op_panel=Selecione o numero da porta para o Painel: "
 echo.
 

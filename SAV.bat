@@ -1,10 +1,10 @@
 @echo off
 setlocal EnableDelayedExpansion
 :: =========================================================
-:: Script de Seleção de Versões isCOBOL - Versão Aprimorada
+:: Script de Seleção de Versões isCOBOL 
 :: =========================================================
 :: Descrição: Permite selecionar versões do isCOBOL e conectar
-:: a diferentes portas de servidores ou painéis.
+:: a diferentes portas de servidores ou panel.
 :: =========================================================
 
 :: Salvar variáveis de ambiente originais
@@ -20,7 +20,7 @@ mode con cols=66 lines=30
 color e0
 
 :: Menu de seleção de versão
-:menu_version
+:menu_versao
 cls
 echo %time% %date%
 echo   %line%
@@ -37,14 +37,14 @@ set /p "op_vesao=Qual versao vai usar? "
 echo.
 
 :: Validação e configuração da versão
-if "!op_vesao!"=="0" goto cleanup_exit
+if "!op_vesao!"=="0" goto limpar_sair
 if "!op_vesao!"=="1" set "ISCOBOL=C:\isCOBOL2024R2"& goto configure_java
 if "!op_vesao!"=="2" set "ISCOBOL=C:\isCOBOL2023R2"& goto configure_java
 if "!op_vesao!"=="3" set "ISCOBOL=C:\isCOBOL2020R2"& goto configure_java
 if "!op_vesao!"=="4" set "ISCOBOL=C:\isCOBOL2018R2"& goto configure_java
 echo Opcao invalida! Tente novamente.
 timeout /t 2 >nul
-goto menu_version
+goto menu_versao
 
 :: Configuração do ambiente Java
 :configure_java
@@ -54,10 +54,10 @@ set "EXE4J_JAVA_HOME=C:\iscobol\jre"
 goto MENU_ISCOBOL
 
 :: Menu de seleção de porta
-:PRINT_STORE_LIST
+:LISTA_OPCAO
 echo %time% %date%
 echo   %line2%
-echo  ^|  Selecione a Porta              ^|
+echo  ^|      Selecione a Porta          ^|
 echo   %line2%
 echo  ^|  35) Servidor Maq.Virtual       ^|
 echo  ^|  33) Servidor Luiz              ^|
@@ -81,7 +81,6 @@ echo  ^|  16) 41146 - Deposito Lima      ^|
 echo  ^|  17) 41147 - LA                 ^|
 echo  ^|  18) 41148 - Vilas Boas         ^|
 echo  ^|  19) 41149 - Real Pecas         ^|
-echo  ^|  99) Painel                     ^|
 echo  ^|   0) Voltar                     ^|
 echo   %line2%
 exit /b
@@ -92,11 +91,11 @@ cls
 echo %LINE%
 echo ^|      SELECIONE A LOJA           ^|
 echo %LINE%
-call :PRINT_STORE_LIST
+call :LISTA_OPCAO
 set /p "op_porta=Selecione o numero da porta para o sistema ou Painel: "
 echo.
 
-if "!op_porta!"=="0" goto menu_version
+if "!op_porta!"=="0" goto menu_versao
 if "!op_porta!"=="99" goto menu_panel
 if "!op_porta!"=="35" set "PORT=10999"& set "HOSTNAME=169.169.69.69"& goto run_client
 if "!op_porta!"=="33" set "PORT=10999"& set "HOSTNAME=luizzy.duckdns.org"& goto run_client
@@ -121,7 +120,7 @@ echo %time% %date%
 echo   %line2%
 echo  ^|  Selecione o Painel             ^|
 echo   %line2%
-call :PRINT_STORE_LIST
+call :LISTA_OPCAO
 set /p "op_panel=Selecione o numero da porta para o Painel: "
 echo.
 
@@ -130,6 +129,7 @@ if "!op_panel!"=="0" goto menu_porta
 if "!op_panel!"=="35" set "PORT=10999"& set "HOSTNAME=169.169.69.69"& goto run_panel
 if "!op_panel!"=="33" set "PORT=10999"& set "HOSTNAME=luizzy.duckdns.org"& goto run_panel
 if "!op_panel!"=="30" set "PORT=41130"& set "HOSTNAME=177.45.80.10"& goto run_panel
+
 :: Validação para portas sequenciais (1 a 19)
 echo !op_panel!| findstr /r "^[1-9]$ ^1[0-9]$" >nul
 if !errorlevel! equ 0 (
@@ -149,10 +149,10 @@ call :ser_variaveis
 if not exist "%ISCOBOL%\bin\isclient.exe" (
     echo Erro: isclient.exe nao encontrado em %ISCOBOL%\bin
     timeout /t 3 >nul
-    goto cleanup_exit
+    goto limpar_sair
 )
 start /min "" "%ISCOBOL%\bin\isclient.exe" -J-Discobol.encoding=CP860 -J-Dfile.encoding=CP860 -hostname %HOSTNAME% -port %PORT% SPS800
-goto cleanup_exit
+goto limpar_sair
 
 :: Executa o painel isCOBOL
 :run_panel
@@ -160,10 +160,10 @@ call :ser_variaveis
 if not exist "%ISCOBOL%\bin\isclient.exe" (
     echo Erro: isclient.exe nao encontrado em %ISCOBOL%\bin
     timeout /t 3 >nul
-    goto cleanup_exit
+    goto limpar_sair
 )
 start /min "" "%ISCOBOL%\bin\isclient.exe" -J-Discobol.encoding=CP860 -J-Dfile.encoding=CP860 -hostname %HOSTNAME% -port %PORT% -panel
-goto cleanup_exit
+goto limpar_sair
 
 :: Configura variáveis de ambiente
 :ser_variaveis
@@ -173,7 +173,7 @@ set "LD_LIBRARY_PATH=%CLASSPATH%"
 exit /b
 
 :: Restaura variáveis e sai
-:cleanup_exit
+:limpar_sair
 set "PATH=%oldPATH%"
 set "CLASSPATH=%oldCLASSPATH%"
 set "LD_LIBRARY_PATH=%oldLIBRARYPATH%"

@@ -81,6 +81,7 @@ echo  ^|  16) 41146 - Deposito Lima      ^|
 echo  ^|  17) 41147 - LA                 ^|
 echo  ^|  18) 41148 - Vilas Boas         ^|
 echo  ^|  19) 41149 - Real Pecas         ^|
+echo  ^|  99) Panel                      ^|
 echo  ^|   0) Voltar                     ^|
 echo   %line2%
 exit /b
